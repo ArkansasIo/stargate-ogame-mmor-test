@@ -81,7 +81,8 @@ const RACE_DETAILS: Array<{ id: Race; name: string; focus: string; description: 
 ];
 
 const TRAINING: Array<{ type: string; label: string; description: string; key: string; icon: typeof Users }> = [
-  { type: "miner", label: "Miners", description: "Economic workforce; generates 80 Naquadah per turn.", key: "miners", icon: BadgeDollarSign },
+  { type: "miner", label: "Miners", description: "Economic workforce; each generates 80 Naquadah per turn.", key: "miners", icon: BadgeDollarSign },
+  { type: "lifer", label: "Lifers", description: "Permanent workforce cadres; convert 10 Miners to generate 800 Naquadah per turn through Ascension.", key: "lifers", icon: BadgeDollarSign },
   { type: "attackTroop", label: "Attack Troops", description: "Offensive personnel requiring attack weapons.", key: "attackTroops", icon: Swords },
   { type: "defenseTroop", label: "Defense Troops", description: "Garrison personnel requiring defense weapons.", key: "defenseTroops", icon: ShieldAlert },
   { type: "covertAgent", label: "Covert Agents", description: "Reconnaissance and infiltration specialists.", key: "covertAgents", icon: Eye },

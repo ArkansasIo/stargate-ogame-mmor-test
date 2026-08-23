@@ -249,7 +249,7 @@ export default function AdminLogin() {
               </div>
             </div>
             <h1 className="text-green-300 text-sm tracking-[0.25em] uppercase font-bold admin-login-glow">
-              Stellar Dominion
+              Universe Civilization: Empire at War
             </h1>
             <p className="text-green-500 text-[10px] tracking-widest uppercase">
               Admin Clearance System · Level {step}/3

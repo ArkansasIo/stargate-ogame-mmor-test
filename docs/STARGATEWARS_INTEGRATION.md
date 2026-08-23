@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This integration adapts the supplied StargateWars design into **Stellar Dominion** as a self-contained strategic layer rather than replacing the existing OGame-style economy, fleet, research, and diplomacy systems. The new layer shares the project’s existing `player_states` row and stores all added data in its JSON state fields. This preserves existing save data and avoids a destructive schema migration.
+This integration adapts the supplied StargateWars design into **Universe Civilization: Empire at War** as a self-contained strategic layer rather than replacing the existing OGame-style economy, fleet, research, and diplomacy systems. The new layer shares the project’s existing `player_states` row and stores all added data in its JSON state fields. This preserves existing save data and avoids a destructive schema migration.
 
 ## Implemented Core Slice
 

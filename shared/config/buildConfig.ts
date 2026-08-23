@@ -1,5 +1,5 @@
 export const BUILD_INFO = {
-  appName: "Stellar Dominion",
+  appName: "Universe Civilization: Empire at War",
   buildName: "Nexus Alpha",
   version: "4.0.0",
   patchVersion: "4.0.0-alpha.1",

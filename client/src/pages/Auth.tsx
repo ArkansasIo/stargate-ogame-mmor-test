@@ -287,11 +287,11 @@ export default function Auth() {
             </Button>
             <Button asChild variant="outline" size="sm" className="text-xs text-cyan-700 border-cyan-300 hover:bg-cyan-50">
               <a href="https://github.com/ArkansasIo/stellar-dominion3" target="_blank" rel="noopener noreferrer" data-testid="button-stellar-dominion3-github">
-                <Github className="w-4 h-4 mr-1" /> Stellar Dominion 3
+                <Github className="w-4 h-4 mr-1" /> Universe Civilization: Empire at War
               </a>
             </Button>
             <Rocket className="w-5 h-5 text-primary" />
-            <span className="font-orbitron font-bold text-sm text-slate-900 tracking-wide">universe-empire-domions</span>
+            <span className="font-orbitron font-bold text-sm text-slate-900 tracking-wide">Universe Civilization: Empire at War</span>
           </div>
           <div className="flex items-center gap-1">
             <Link href="/forums"><Button variant="ghost" size="sm" className="text-xs text-slate-600 hover:text-slate-900">Forums</Button></Link>
@@ -322,12 +322,12 @@ export default function Auth() {
               <div className="w-16 h-16 bg-gradient-to-br from-slate-800 to-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
                 <img
                   src={MENU_ASSETS.NAVIGATION.EXPLORATION.path}
-                  alt="universe-empire-domions"
+                  alt="Universe Civilization: Empire at War"
                   className="w-10 h-10 object-contain"
                   onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = TEMP_THEME_IMAGE; }}
                 />
               </div>
-              <CardTitle className="text-3xl font-orbitron font-bold tracking-wider text-slate-900 xl:text-[2rem]">universe-empire-domions</CardTitle>
+              <CardTitle className="text-3xl font-orbitron font-bold tracking-wider text-slate-900 xl:text-[2rem]">Universe Civilization: Empire at War</CardTitle>
               <CardDescription className="mt-2 font-rajdhani text-base font-medium text-slate-700">Command your fleet. Conquer the stars.</CardDescription>
             </CardHeader>
 
@@ -343,7 +343,7 @@ export default function Auth() {
                   </div>
                   <div className="bg-white border border-green-200 p-3 rounded flex items-center justify-between font-mono text-sm">
                     <span className="text-slate-900 break-all">{tempPassword}</span>
-                    <button type="button" onClick={copyPassword} className="ml-2 shrink-0 p-1 hover:bg-slate-100 rounded transition-colors" data-testid="button-copy-password">
+                    <button type="button" aria-label="Copy temporary password" onClick={copyPassword} className="ml-2 shrink-0 p-1 hover:bg-slate-100 rounded transition-colors" data-testid="button-copy-password">
                       {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-slate-600" />}
                     </button>
                   </div>
@@ -530,7 +530,7 @@ export default function Auth() {
             <CardFooter className="flex flex-col items-center gap-3 border-t border-slate-300 pb-5 pt-5">
               <Link href="/about">
                 <Button variant="ghost" className="text-slate-700 hover:text-slate-900 transition-colors" data-testid="button-about">
-                  <Info className="w-4 h-4 mr-2" /> About universe-empire-domions
+                  <Info className="w-4 h-4 mr-2" /> About Universe Civilization: Empire at War
                 </Button>
               </Link>
               <div className="flex items-center gap-4 text-xs text-slate-600">
@@ -627,7 +627,7 @@ export default function Auth() {
 
       <div className="fixed bottom-0 inset-x-0 border-t border-slate-300 bg-white/95 backdrop-blur-sm z-20">
         <div className="max-w-4xl mx-auto px-4 py-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-slate-600">
-          <span className="font-semibold text-slate-700">universe-empire-domions</span>
+          <span className="font-semibold text-slate-700">Universe Civilization: Empire at War</span>
           <span>&bull;</span>
           <span>Version {GAME_VERSION}</span>
           <span>&bull;</span>

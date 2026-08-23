@@ -1,7 +1,7 @@
 # StargateWars Complete Systems Roadmap
 
 **Author:** Manus AI  
-**Scope:** Current Stellar Dominion integration against the user-supplied complete StargateWars systems specification.
+**Scope:** Current Universe Civilization: Empire at War integration against the user-supplied complete StargateWars systems specification.
 
 ## Executive assessment
 

@@ -160,7 +160,7 @@ export default function Index() {
                   CIVILIZATION
                 </span>
                 <br />
-                EMPIRES AT WAR
+                EMPIRE AT WAR
               </h1>
 
               <p className="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 font-rajdhani">
@@ -324,7 +324,7 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-slate-400">
-              &copy; 2026 Universe Civilization: Empires at War. All rights reserved.
+              &copy; 2026 Universe Civilization: Empire at War. All rights reserved.
             </p>
             <div className="flex items-center gap-4">
               <Link href="/about" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">Privacy</Link>

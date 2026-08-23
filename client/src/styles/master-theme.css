@@ -658,3 +658,124 @@
     forced-color-adjust: auto;
   }
 }
+
+/* Command-console header: identity and controls are intentionally separated from live resources. */
+.sd-command-header-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.sd-command-brand-panel {
+  min-height: 5.5rem;
+  padding: 0.75rem;
+  border: 1px solid rgba(79, 107, 134, 0.38);
+  background: linear-gradient(135deg, rgba(8, 31, 47, 0.62), rgba(10, 41, 67, 0.3));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.sd-command-control-deck {
+  justify-content: flex-start;
+}
+
+.sd-command-utility-links {
+  align-self: flex-end;
+}
+
+.sd-command-update-actions {
+  min-height: 2rem;
+}
+
+.sd-command-realm-row {
+  min-height: 2.5rem;
+}
+
+.sd-command-resource-deck {
+  position: relative;
+  min-height: 3.45rem;
+  isolation: isolate;
+}
+
+.sd-command-resource-deck::before {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 0.45rem;
+  border-right: 1px solid rgba(25, 124, 169, 0.55);
+  color: #9bcbe5;
+  background: linear-gradient(90deg, #020d1c 76%, rgba(2, 13, 28, 0.82));
+  font-family: var(--sd-font-display);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  content: "RESOURCES";
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-header {
+  background:
+    linear-gradient(90deg, rgba(2, 13, 28, 0.98), rgba(7, 30, 54, 0.98) 43%, rgba(2, 20, 20, 0.98)) !important;
+  box-shadow: inset 0 -1px 0 rgba(108, 229, 255, 0.16), 0 10px 24px rgba(0, 0, 0, 0.26) !important;
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-brand-panel {
+  border-color: rgba(25, 124, 169, 0.66);
+  background:
+    radial-gradient(circle at 0 0, rgba(66, 211, 197, 0.14), transparent 42%),
+    linear-gradient(135deg, rgba(2, 20, 20, 0.96), rgba(7, 30, 54, 0.88));
+  box-shadow: inset 0 1px 0 rgba(108, 229, 255, 0.14), inset 4px 0 0 rgba(66, 211, 197, 0.62);
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-control-deck {
+  padding: 0.35rem;
+  border: 1px solid rgba(24, 91, 136, 0.58);
+  background: rgba(2, 13, 28, 0.36);
+  box-shadow: inset 0 1px 0 rgba(108, 229, 255, 0.08);
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-update-actions > :is(button, a > button) {
+  border-color: rgba(25, 124, 169, 0.62) !important;
+  background-color: rgba(2, 13, 28, 0.64) !important;
+  color: #dff7ff !important;
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-resource-deck {
+  border-color: #197ca9 !important;
+  background:
+    linear-gradient(90deg, rgba(2, 13, 28, 0.99), rgba(4, 29, 52, 0.98), rgba(2, 13, 28, 0.99)) !important;
+  box-shadow: inset 0 1px 0 rgba(108, 229, 255, 0.18), 0 8px 20px rgba(0, 0, 0, 0.28) !important;
+}
+
+:root[data-sd-theme="windows-blue"] .sd-command-resource-deck .sd-ogame-resource-cell:hover,
+:root[data-sd-theme="windows-blue"] .sd-command-resource-deck .sd-ogame-turn-cell:hover {
+  background: rgba(25, 124, 169, 0.2);
+}
+
+@media (min-width: 768px) {
+  .sd-command-header-grid {
+    align-items: stretch;
+  }
+
+  .sd-command-control-deck {
+    align-items: stretch;
+  }
+
+  .sd-command-update-actions,
+  .sd-command-realm-row {
+    justify-content: flex-end;
+  }
+
+  .sd-command-resource-deck {
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 767px) {
+  .sd-command-brand-panel {
+    min-height: 0;
+  }
+
+  .sd-command-resource-deck::before {
+    position: static;
+  }
+}

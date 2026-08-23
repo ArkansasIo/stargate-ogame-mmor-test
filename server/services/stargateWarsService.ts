@@ -329,7 +329,9 @@ function calculateArmoryStrength(strategic: StargateWarsState, category: WeaponC
 }
 
 export function calculateNaturalIncome(personnel: StargatePersonnel, state: StargateWarsState): number {
-  const baseIncome = personnel.untrained * 20 + (personnel.miners + personnel.lifers) * 80;
+  // A Lifer is a permanent cadre created from ten Miners. It preserves the same
+  // economic contribution through Ascension instead of becoming a losing conversion.
+  const baseIncome = personnel.untrained * 20 + personnel.miners * 80 + personnel.lifers * 800;
   return Math.floor(baseIncome * raceIncomeMultiplier(state.race) * DEFCON_INCOME_MULTIPLIER[state.defcon]);
 }
 
@@ -399,9 +401,11 @@ async function persistState(
   userId: string,
   payload: { resources?: RecordValue; personnel?: StargatePersonnel; government?: RecordValue },
 ): Promise<void> {
+  // Stargate personnel and legacy fleets share `player_states.units`; merge rather than replace.
+  const currentUnits = payload.personnel ? asRecord((await requirePlayerState(userId)).units) : undefined;
   await db.update(playerStates).set({
     ...(payload.resources ? { resources: payload.resources } : {}),
-    ...(payload.personnel ? { units: payload.personnel } : {}),
+    ...(payload.personnel ? { units: { ...currentUnits, ...payload.personnel } } : {}),
     ...(payload.government ? { government: payload.government } : {}),
     updatedAt: new Date(),
   }).where(eq(playerStates.userId, userId));

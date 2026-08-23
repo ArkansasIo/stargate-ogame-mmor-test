@@ -130,7 +130,7 @@ function LoadingSplash() {
         </div>
 
         <h1 className="font-orbitron text-4xl font-bold text-white tracking-widest mb-2">
-          Universe-<span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">Empires-Dominions</span>
+          Universe Civilization:<span className="bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent"> Empire at War</span>
         </h1>
         <p className="text-slate-300 font-rajdhani text-xs tracking-widest uppercase mb-5">
           Connecting to Nexus Command System

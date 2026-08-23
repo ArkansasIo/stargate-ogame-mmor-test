@@ -637,6 +637,51 @@ const getCommandTiles = (context: ActivePageContext | null): CommandTile[] => {
   }
 };
 
+const getSystemConnections = (context: ActivePageContext | null): NavItem[] => {
+  if (!context) return [];
+
+  const routes: Record<string, NavItem[]> = {
+    Empire: [
+      { href: "/resources", icon: Pickaxe, label: "Industry Input", description: "Collect resources before committing to construction or expansion." },
+      { href: "/facilities", icon: Factory, label: "Build Capacity", description: "Turn available resources into production, research, and support capacity." },
+      { href: "/research", icon: FlaskConical, label: "Research Unlocks", description: "Convert infrastructure capacity into technologies and strategic options." },
+      { href: "/shipyard", icon: Rocket, label: "Force Output", description: "Use empire industry to produce the forces required by fleet and ground operations." },
+    ],
+    Research: [
+      { href: "/resources", icon: Pickaxe, label: "Fund Research", description: "Resource production supplies the inputs required for research progression." },
+      { href: "/research-lab", icon: FlaskConical, label: "Manage Labs", description: "Allocate laboratory capacity and review active research work." },
+      { href: "/technology-tree", icon: GraduationCap, label: "Plan Prerequisites", description: "Follow prerequisites before spending resources on dependent upgrades." },
+      { href: "/shipyard", icon: Rocket, label: "Apply Unlocks", description: "Turn completed research into fleet and defensive capability." },
+    ],
+    Military: [
+      { href: "/shipyard", icon: Rocket, label: "Prepare Forces", description: "Build ships and equipment before issuing operational orders." },
+      { href: "/fleet", icon: Send, label: "Deploy Fleet", description: "Commit available units and deuterium to missions and logistics." },
+      { href: "/stargate-command", icon: Radar, label: "Strategic Layer", description: "Coordinate turns, Naquadah, personnel, intelligence, and strategic operations." },
+      { href: "/battle-logs", icon: ScrollText, label: "Review Reports", description: "Use resolved battle results to refine force composition and defense planning." },
+    ],
+    Exploration: [
+      { href: "/galaxy", icon: Globe, label: "Survey Space", description: "Locate systems and targets before committing travel or expansion resources." },
+      { href: "/expeditions", icon: Compass, label: "Launch Expeditions", description: "Convert surveyed routes into active discovery and risk-reward missions." },
+      { href: "/stargate-worlds", icon: Globe, label: "Develop Worlds", description: "Turn discoveries into persistent strategic worlds and defensive positions." },
+      { href: "/stargate-command", icon: Radar, label: "Plan Operations", description: "Use strategic turns and intelligence to act on discovered opportunities." },
+    ],
+    Diplomacy: [
+      { href: "/messages", icon: Mail, label: "Coordinate", description: "Review reports and communicate before alliance or trade decisions." },
+      { href: "/alliance", icon: Shield, label: "Organize Allies", description: "Convert contacts into coordinated alliance capabilities." },
+      { href: "/leaderboard", icon: Trophy, label: "Assess Standing", description: "Compare visible empire strength and target or partner positioning." },
+      { href: "/stargate-social", icon: Users, label: "Strategic Social", description: "Manage commanders, officers, alliances, and strategic notices." },
+    ],
+    Economy: [
+      { href: "/resources", icon: Pickaxe, label: "Produce", description: "Maintain conventional resource inputs before trading or reinvesting." },
+      { href: "/market", icon: ShoppingBag, label: "Trade", description: "Convert surpluses into required conventional materials and credits." },
+      { href: "/stargate-market", icon: Hexagon, label: "Strategic Exchange", description: "Use the Naquadah market for strategic personnel and reserve management." },
+      { href: "/facilities", icon: Factory, label: "Reinvest", description: "Return economic gains to permanent production and support capacity." },
+    ],
+  };
+
+  return (routes[context.section] || []).filter((item) => !isNavItemActive(item, context.item.href));
+};
+
 const getActivePageContext = (location: string, isAdmin: boolean): ActivePageContext | null => {
   for (const section of menuSections) {
     for (const group of section.groups) {
@@ -751,38 +796,42 @@ const ResourceDisplay = ({ icon: Icon, label, value, colorClass, rateLabel }: { 
   const safeValue = Number.isFinite(value) ? value : 0;
 
   return (
-    <div className="sd-resource-chip flex shrink-0 items-center gap-2 rounded border border-slate-200 bg-white px-2.5 py-2 shadow-sm min-w-[112px] sm:min-w-[124px]" data-resource={label.toLowerCase()}>
-      <div className={cn("rounded-full bg-slate-100 p-1.5", colorClass)}>
-        <Icon className="w-3.5 h-3.5" />
+    <div
+      className="sd-ogame-resource-cell flex w-[68px] min-w-[68px] shrink-0 items-center gap-1 border-r border-cyan-950/80 px-1.5 py-1.5 last:border-r-0 sm:w-[70px] sm:min-w-[70px]"
+      data-resource={label.toLowerCase()}
+      aria-label={`${label}: ${Math.floor(safeValue).toLocaleString()}${rateLabel ? `, ${rateLabel}` : ""}`}
+      title={label}
+    >
+      <div className={cn("rounded bg-slate-950/70 p-0.5", colorClass)}>
+        <Icon className="h-3 w-3" />
       </div>
-      <div className="flex flex-col">
-        <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground">{label}</span>
-        <span className={cn("sd-resource-value font-orbitron text-xs font-medium tabular-nums sm:text-sm", colorClass)}>
+      <div className="flex min-w-0 flex-1 flex-col leading-tight">
+        <span className="truncate text-[7px] uppercase tracking-[0.08em] text-cyan-100/60">{label}</span>
+        <span className={cn("sd-resource-value font-orbitron text-[10px] font-semibold tabular-nums sm:text-xs", colorClass)}>
           {Math.floor(safeValue).toLocaleString()}
         </span>
-        {rateLabel ? <span className="font-mono text-[8px] text-muted-foreground">{rateLabel}</span> : null}
+        {rateLabel ? <span className="truncate font-mono text-[7px] text-cyan-100/55">{rateLabel}</span> : null}
       </div>
     </div>
   );
 };
 
 const TurnDisplay = ({ currentTurns, totalTurns, isLoading }: { currentTurns: number, totalTurns: number, isLoading: boolean }) => (
-  <div className="sd-turn-chip flex shrink-0 items-center gap-2 rounded border border-indigo-200 bg-gradient-to-r from-indigo-50 to-purple-50 px-2.5 py-2 shadow-sm min-w-[148px] sm:min-w-[164px]" data-testid="display-turns">
-    <div className="rounded-full bg-indigo-100 p-1.5 text-indigo-600">
-      {isLoading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Clock className="w-3.5 h-3.5" />}
+  <div className="sd-ogame-turn-cell flex min-w-[112px] shrink-0 items-center gap-1 border-r border-indigo-500/35 bg-indigo-950/35 px-1.5 py-1.5 sm:min-w-[118px]" data-testid="display-turns">
+    <div className="rounded bg-indigo-500/15 p-0.5 text-indigo-200">
+      {isLoading ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Clock className="h-3 w-3" />}
     </div>
-    <div className="flex flex-col">
-      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-indigo-600">Turns</span>
-      <div className="flex items-center gap-2">
-        <span className="font-orbitron text-xs font-bold tabular-nums text-indigo-900 sm:text-sm">
-          {currentTurns.toLocaleString()}
-        </span>
-        <span className="font-mono text-[9px] text-indigo-500">+6/min</span>
+    <div className="flex flex-col leading-tight">
+              <span className="text-[7px] font-bold uppercase tracking-[0.08em] text-indigo-200/70">Turns</span>
+        <div className="flex items-center gap-1">
+          <span className="font-orbitron text-[10px] font-bold tabular-nums text-indigo-100 sm:text-xs">{currentTurns.toLocaleString()}</span>
+          <span className="font-mono text-[7px] text-indigo-300">+6/min</span>
+
       </div>
     </div>
-    <div className="ml-1 border-l border-indigo-200 pl-2.5">
-      <span className="text-[9px] uppercase tracking-widest text-slate-400">Total</span>
-      <div className="font-mono text-[11px] text-slate-600">{totalTurns.toLocaleString()}</div>
+    <div className="ml-0.5 border-l border-indigo-500/25 pl-1.5">
+      <span className="text-[7px] uppercase tracking-[0.08em] text-indigo-200/55">Total</span>
+      <div className="font-mono text-[9px] text-indigo-100">{totalTurns.toLocaleString()}</div>
     </div>
   </div>
 );
@@ -829,7 +878,7 @@ function GameSidebar({
               />
             </div>
             <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
-              {empireName || "Stellar Dominion"}
+              {empireName || "Universe Civilization: Empire at War"}
             </div>
             <h3 className="font-orbitron text-sm font-bold text-slate-900">{planetName}</h3>
             <p className="text-xs text-muted-foreground">[{coordinates}]</p>
@@ -1070,6 +1119,7 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
           : "max-w-[1360px]";
   const contentPaddingClass = displayPreferences.compactView ? "p-3 sm:p-4 lg:p-5" : "p-3 sm:p-4 lg:p-6";
   const commandTiles = getCommandTiles(activePageContext);
+  const systemConnections = getSystemConnections(activePageContext);
   const pageInfrastructure = activePageContext ? getPageInfrastructure(activePageContext) : [];
   const unreadMessages = messages.filter((message) => !message.read).length;
   const sharedActions: PageAction[] =
@@ -1213,14 +1263,14 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
       
       {/* Top Bar - Resources */}
       <header className={cn(
-        "sd-topbar relative z-20 border-b border-slate-200 bg-white/88 shadow-sm backdrop-blur-md",
+        "sd-topbar sd-command-header relative z-20 border-b border-slate-200 bg-white/88 shadow-sm backdrop-blur-md",
         isMobile && displayPreferences.stickyMobileBars && "sticky top-0",
       )}>
         <div className={cn(
-          "flex flex-col gap-2 px-3 py-3 sm:px-5",
-          !isMobile && "flex-row items-start justify-between xl:items-center",
+          "sd-command-header-grid grid gap-2 px-3 py-3 sm:px-5",
+          !isMobile && "md:grid-cols-[minmax(15rem,0.8fr)_minmax(0,2fr)] md:items-stretch",
         )}>
-        <div className="flex items-start justify-between gap-3">
+        <div className="sd-command-brand-panel flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 sm:gap-4">
             {isMobile && (
               <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
@@ -1254,12 +1304,12 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
              <Rocket className="text-white w-6 h-6" />
            </div>
            <div>
-             <h1 className={cn("font-orbitron font-bold tracking-wider text-[var(--sd-text-primary)]", isMobile ? "text-base" : "text-lg xl:text-xl")}>Universe-<span className="text-primary text-xs font-normal xl:text-sm">Empires-Dominions</span></h1>
+             <h1 className={cn("font-orbitron font-bold tracking-wider text-[var(--sd-text-primary)]", isMobile ? "text-base" : "text-lg xl:text-xl")}>Universe Civilization:<span className="text-primary text-xs font-normal xl:text-sm"> Empire at War</span></h1>
              <p className="font-rajdhani text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:text-xs">
                Server: Nexus-Alpha // User: {username || "Commander"}
              </p>
              <p className="font-rajdhani text-[10px] uppercase tracking-[0.18em] text-slate-500 sm:text-xs">
-               Empire: {empireName || "Stellar Dominion"} // Homeworld: {planetName || "Prime World"}
+               Empire: {empireName || "Universe Civilization: Empire at War"} // Homeworld: {planetName || "Prime World"}
              </p>
            </div>
           </div>
@@ -1272,30 +1322,8 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
           )}
         </div>
 
-        <div className={cn("flex flex-col gap-2", !isMobile && "items-end")}>
-          <div className="sd-top-link-bar hidden lg:flex items-center gap-1">
-              {[
-              { href: "/forums", label: "Forums" },
-              { href: "/about", label: "About" },
-              { href: "/terms", label: "Terms" },
-              { href: "/privacy", label: "Privacy" },
-            ].map((entry) => (
-              <Link key={entry.href} href={entry.href}>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={cn(
-                    "h-7 px-2 text-[11px]",
-                    location === entry.href ? "text-primary" : "text-slate-600 hover:text-slate-900"
-                  )}
-                >
-                  {entry.label}
-                </Button>
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex w-full flex-wrap items-center justify-start gap-1.5 lg:justify-end" data-testid="header-update-actions">
+        <div className={cn("sd-command-control-deck flex min-w-0 flex-col gap-2", !isMobile && "items-end")}>
+          <div className="sd-command-update-actions flex w-full flex-wrap items-center justify-start gap-1.5 lg:justify-end" data-testid="header-update-actions">
             <div className={cn(
               "mr-1 flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em]",
               updateInfo?.available
@@ -1337,7 +1365,7 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           <div className={cn(
-            "flex items-center gap-2",
+            "sd-command-realm-row flex items-center gap-2",
             isMobile ? "w-full flex-wrap" : "justify-end"
           )}>
             <div className="sd-realm-label text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">
@@ -1376,9 +1404,9 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
           </div>
 
           <div className={cn(
-            "flex gap-2 pb-1 scrollbar-hide",
-            isMobile ? "w-full overflow-x-auto" : "max-w-[920px] flex-wrap justify-end overflow-visible",
-          )}>
+            "sd-ogame-resource-bar sd-command-resource-deck flex w-full min-w-0 items-stretch overflow-x-auto rounded-md border border-cyan-800/80 bg-[#020d1c]/95 shadow-[inset_0_1px_0_rgba(108,229,255,0.12),0_6px_18px_rgba(0,0,0,0.22)] scrollbar-hide",
+            isMobile ? "max-w-full" : "max-w-[1120px]",
+          )} aria-label="Live empire resources">
             <TurnDisplay 
               currentTurns={turnData?.currentTurns || 0} 
               totalTurns={turnData?.totalTurns || 0} 
@@ -1486,6 +1514,34 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
                        </div>
                      ))}
                    </div>
+
+                   {systemConnections.length > 0 && (
+                     <div className="mt-4 border-t border-cyan-900/30 pt-4">
+                       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                         <div>
+                           <div className="sd-eyebrow text-[10px] font-bold uppercase tracking-[0.24em] text-cyan-700">Live System Route</div>
+                           <p className="mt-1 text-xs leading-5 text-slate-600">Follow the connected production, progression, and operations loop from this hub.</p>
+                         </div>
+                         <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-cyan-700">{systemConnections.length} connected systems</span>
+                       </div>
+                       <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                         {systemConnections.map((connection, index) => (
+                           <Link key={connection.href} href={connection.href}>
+                             <div className="sd-system-route-card flex h-full min-w-0 cursor-pointer items-start gap-2 rounded-lg border border-cyan-900/30 bg-cyan-50/45 p-2.5 transition-colors hover:border-cyan-400 hover:bg-white">
+                               <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-cyan-900/10 text-cyan-700">
+                                 <connection.icon className="h-3.5 w-3.5" />
+                               </div>
+                               <div className="min-w-0">
+                                 <div className="text-[9px] font-bold uppercase tracking-[0.16em] text-cyan-700">Step {index + 1}</div>
+                                 <div className="truncate font-rajdhani text-sm font-bold uppercase tracking-wide text-slate-800">{connection.label}</div>
+                                 <p className="mt-0.5 text-[11px] leading-4 text-slate-500">{connection.description}</p>
+                               </div>
+                             </div>
+                           </Link>
+                         ))}
+                       </div>
+                     </div>
+                   )}
                  </div>
 
                  {showPageCommandDeck ? (
@@ -1727,7 +1783,7 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
 
       <footer className="sd-footer-shell relative z-10 border-t border-slate-200 bg-white/88 px-4 py-2 backdrop-blur-md sm:px-6 flex flex-col gap-1 sm:h-8 sm:flex-row sm:items-center sm:justify-between text-[11px] text-slate-500 font-mono" data-testid="footer-build-info">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="font-semibold text-slate-700">universe-empire-domions</span>
+          <span className="font-semibold text-slate-700">Universe Civilization: Empire at War</span>
           <span>Developer: Stephen</span>
           <span>
             Publisher:{" "}
