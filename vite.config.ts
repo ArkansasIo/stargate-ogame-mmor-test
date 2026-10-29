@@ -6,6 +6,8 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 export default defineConfig({
+  // GitHub Pages serves this project beneath /<repository-name>/.
+  base: process.env.GITHUB_PAGES === "true" ? "/stargate-ogame-mmor-test/" : "/",
   plugins: [
     react(),
     runtimeErrorOverlay(),
