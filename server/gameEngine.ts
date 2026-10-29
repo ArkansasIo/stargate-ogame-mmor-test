@@ -8,6 +8,7 @@ import { CelestialService } from './services/celestialService';
 import { db } from './db';
 import { playerStates } from '../shared/schema';
 import { eq } from 'drizzle-orm';
+import { calculateOGameProduction, calculateOGameBuildingCost } from '../shared/gameplay/stargateOGameRules';
 
 type ResourceCost = { metal: number; crystal: number; deuterium: number };
 type ResourceState = {
@@ -48,30 +49,12 @@ export const SHIP_COSTS: Record<string, ResourceCost> = {
 };
 
 export function calculateProduction(buildings: Record<string, number> = {}, research: Record<string, number> = {}) {
-  const metalMineLevel = buildings.metalMine || 0;
-  const crystalMineLevel = buildings.crystalMine || 0;
-  const deuteriumLevel = buildings.deuteriumSynthesizer || 0;
-  const energyTech = research.energyTech || 0;
-
-  return {
-    metal: Math.floor(30 * metalMineLevel * (1 + metalMineLevel / 10)),
-    crystal: Math.floor(20 * crystalMineLevel * (1 + crystalMineLevel / 10)),
-    deuterium: Math.floor(10 * deuteriumLevel * (1 + deuteriumLevel / 12)),
-    energy: Math.floor(20 + energyTech * 5),
-  };
+  return calculateOGameProduction(buildings, research);
 }
-
 export function calculateBuildingCost(buildingType: string, currentLevel: number): ResourceCost {
   const baseCost = BUILDING_COSTS[buildingType] || BUILDING_COSTS.metalMine;
-  const factor = Math.pow(1.15, Math.max(0, currentLevel));
-
-  return {
-    metal: Math.floor(baseCost.metal * factor),
-    crystal: Math.floor(baseCost.crystal * factor),
-    deuterium: Math.floor(baseCost.deuterium * factor),
-  };
+  return calculateOGameBuildingCost(baseCost, currentLevel);
 }
-
 export function calculateBuildTime(buildingType: string, currentLevel: number, roboticsFactoryLevel: number): number {
   const cost = calculateBuildingCost(buildingType, currentLevel);
   const totalCost = cost.metal + cost.crystal + cost.deuterium;
